@@ -131,6 +131,11 @@ public class CharacterController2D : MonoBehaviour
 			m_Grounded = false;
 			m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
 		}
+
+		if (Input.GetButtonUp("Jump") && m_Rigidbody2D.velocity.y > 0f)
+		{
+			m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, m_Rigidbody2D.velocity.y * 0.5f);
+		}
 	}
 
 
