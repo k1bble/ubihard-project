@@ -8,11 +8,20 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController2D controller;
     public float movspeed = 40f;
     float horizontalMove = 0f;
+    public bool lockMovement = false;
     bool jump = false;
-    // Update is called once per frame
+   
+
     void Update()
     {
-        horizontalMove = Input.GetAxisRaw("Horizontal") * movspeed;
+        if (!lockMovement)
+        {
+            horizontalMove = Input.GetAxisRaw("Horizontal") * movspeed;
+        }
+        else
+        {
+            horizontalMove = 0f;
+        }
 
         if (Input.GetButtonDown("Jump"))
         {
