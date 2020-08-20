@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public Transform character;
     public CharacterController2D controller;
-    public float movspeed = 40f;
-    float horizontalMove = 0f;
+    public float movementSpeed = 40f;
+    float horizontalMove;
     public bool lockMovement = false;
     bool jump = false;
    
@@ -16,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!lockMovement)
         {
-            horizontalMove = Input.GetAxisRaw("Horizontal") * movspeed;
+            horizontalMove = Input.GetAxisRaw("Horizontal") * movementSpeed;
         }
         else
         {
@@ -31,10 +30,10 @@ public class PlayerMovement : MonoBehaviour
     }
     void FixedUpdate()
     {
+
         controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump);
 
         jump = false;
-
     }
 
 
