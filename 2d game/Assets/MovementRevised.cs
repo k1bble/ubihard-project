@@ -9,8 +9,10 @@ public class MovementRevised : MonoBehaviour
     [SerializeField] private float jumpVelocity = 5f;
     [SerializeField] private LayerMask groundIsWhat;
     [Range(0, .3f)] [SerializeField] private float MovementSmoothing = .05f;
-
     [SerializeField] private Transform groundCheck;
+
+    [SerializeField] private float dashSpeedo = 5f;
+    
     [Header("High and low jump Multipliers")]
     [Space]
     [SerializeField] private float fallMultiplier = 2.5f;
@@ -21,10 +23,10 @@ public class MovementRevised : MonoBehaviour
 
     private float xMoveAxis;
     private float yMoveAxis;
-    private bool jump;
+    private bool jump, dash = false;
     private Vector3 refVelocity = Vector3.zero;
 
-
+        
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -37,6 +39,11 @@ public class MovementRevised : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
         {
             jump = true;
+        }
+
+        if (Input.GetButtonDown("Dash"))
+        {
+            dash = true;
         }
     }
     void FixedUpdate()
@@ -53,11 +60,12 @@ public class MovementRevised : MonoBehaviour
         onGround = Physics2D.OverlapCircle(groundCheck.position, overlapRadius, groundIsWhat);
         Vector2 dir = new Vector2(xMoveAxis, yMoveAxis);
 
-        Move(dir * Time.fixedDeltaTime, jump);
+        Move(dir * Time.fixedDeltaTime, jump, dash);
         jump = false;
+        dash = false;
 
     }
-    private void Move(Vector2 dir, bool jump) {
+    private void Move(Vector2 dir, bool jump, bool dash) {
         Vector3 targetVelocity = new Vector2(dir.x * 10f * movementSpeed, rb.velocity.y);
         rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref refVelocity, MovementSmoothing);
 
@@ -68,6 +76,13 @@ public class MovementRevised : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, 0);
             rb.velocity += Vector2.up * jumpVelocity;
         }
+
+        //code for the awesome dash
+        if ((onGround || !onGround) && dash)
+        {
+            rb.velocity = new Vector2(rb.velocity.x * dashSpeedo, 0);
+        }                   
     }
+
     
 }
